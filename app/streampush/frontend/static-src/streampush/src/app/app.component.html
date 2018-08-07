@@ -1,22 +1,16 @@
-<mat-toolbar color="primary">
-  <span>StreamPush</span>
-</mat-toolbar>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Streampush</a>
+</nav>
 
-<div layout="row" layout-align="center center">
-  <mat-card flex class="login-card">
-    <mat-card-header>
-      <mat-card-title>Login to StreamPush</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <p>
-        Login form here
-      </p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button>Login</button>
-      <button mat-button>Register</button>
-    </mat-card-actions>
-  </mat-card>
-  
-  
+<div *ngIf="loggedIn" class="container">
+  <div class="row" style="margin-top: 50px;">
+    <div class="col-sm-9">
+      <app-restreams></app-restreams>
+    </div>
+    <div class="col-sm-3">
+      TODO
+    </div>
+  </div>
 </div>
+
+<app-login *ngIf="!loggedIn"></app-login>

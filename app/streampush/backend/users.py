@@ -1,5 +1,8 @@
 from .models import UserProfile
-from rest_framework import serializers, permissions, viewsets, mixins
+from rest_framework import serializers, permissions, viewsets, mixins, authentication
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 
 from django.db.models.signals import post_save
@@ -23,6 +26,14 @@ class UserPermission(permissions.BasePermission):
         if request.user.is_staff:
             return True
         return obj.user == request.user
+
+class UsersMeView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        user_obj = get_object_or_404(UserProfile, user=request.user)
+        serializer = UserProfileSerializer(user_obj)
+        return Response(serializer.data)
 
 class UserProfileViewSet(mixins.RetrieveModelMixin,
                          mixins.UpdateModelMixin,

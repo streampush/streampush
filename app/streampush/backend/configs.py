@@ -61,6 +61,8 @@ def gen_configs_for_restream(restream):
 application {0} {{
     live on;
     meta copy;
+    on_publish http://localhost:8000/api/v1/notify/{0};
+    on_publish_done http://localhost:8000/api/v1/notify/{0};
 
 {1}
 }}""".format(restream.id, push_points, restream.owner.user.username, datetime.datetime.now(), restream.name)
