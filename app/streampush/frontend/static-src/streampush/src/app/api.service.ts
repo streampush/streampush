@@ -36,8 +36,26 @@ export class ApiService extends EventEmitter {
     }
   }
 
+  getCookie(name) {
+    var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    if (match) return match[2];
+  }
+
   get(endpoint) {
     return this.http.get(this.basePath + endpoint)
+  }
+
+  post(endpoint, data) {
+    return this.http.post(this.basePath + endpoint, data, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": this.getCookie("csrftoken")
+      }
+    })
+  }
+
+  createRestream(data) {
+    return this.post('restreams/create', data);
   }
 
   getRestreams() {

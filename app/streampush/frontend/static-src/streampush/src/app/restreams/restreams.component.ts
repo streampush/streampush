@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ApiService } from '../api.service';
 
 @Component({
@@ -9,6 +9,9 @@ import { ApiService } from '../api.service';
 export class RestreamsComponent implements OnInit {
   restreams:any = []
 
+  @ViewChild('closeBtn') closeBtn: ElementRef;
+
+  public creating:boolean = false;
   public newRestreamName:string;
   public newRestreamEndpoints:any = []
 
@@ -19,8 +22,22 @@ export class RestreamsComponent implements OnInit {
   }
 
   createRestream() {
-    console.log(this.newRestreamName)
-    console.log(this.newRestreamEndpoints)
+    this.creating = true;
+
+    this.apiService.createRestream({
+      name: this.newRestreamName,
+      endpoints: this.newRestreamEndpoints
+    }).subscribe((data) => {
+      this.creating = false;
+      if (data['err'] != undefined) {
+        alert("An error occurred while creating your restream.");
+      } else {
+        this.pollRestreams();
+        this.closeBtn.nativeElement.click();
+        this.newRestreamName = "";
+        this.newRestreamEndpoints = [];
+      }
+    });
   }
 
   cancel() {

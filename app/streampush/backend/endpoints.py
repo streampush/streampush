@@ -6,6 +6,16 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 class StreamEndpointSerializer(serializers.ModelSerializer):
+    def validate_owner(self, value):
+        '''
+        If the user isn't staff, don't let them create
+        an endpoint with an owner other than themself.
+        '''
+        if self.context['request'].user.is_staff:
+            return value
+        userprofile = get_object_or_404(UserProfile, user=self.context['request'].user)
+        return userprofile
+
     class Meta:
         model = StreamEndpoint
         fields = ('id', 'name', 'url', 'brand')

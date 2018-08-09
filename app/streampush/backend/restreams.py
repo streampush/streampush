@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import get_object_or_404
 
 from rest_framework import serializers, viewsets, permissions
@@ -19,6 +21,10 @@ class RestreamSerializer(serializers.ModelSerializer):
         return ser.data
 
     def validate_owner(self, value):
+        '''
+        If the user isn't staff, don't let them create a restream
+        with an owner other than themself.
+        '''
         if self.context['request'].user.is_staff:
             return value
         userprofile = get_object_or_404(UserProfile, user=self.context['request'].user)
@@ -43,6 +49,25 @@ class RestreamsMeView(APIView):
         serializer = RestreamSerializer(restreams_objs, many=True)
         return Response(serializer.data)
 
+class RestreamsCreateView(APIView):
+    def post(self, request):
+        if not "name" in request.data:
+            return Response({"err": "Name is missing"}, status=400)
+        
+        owner = get_object_or_404(UserProfile, user=request.user)
+
+        new_restream = Restream();
+        new_restream.name = request.data["name"]
+        new_restream.owner = owner
+        new_restream.save()
+
+        for endpoint_data in request.data["endpoints"]:
+            endpoint = StreamEndpoint.objects.get(pk=endpoint_data['id'])
+            endpoint.restream.add(new_restream)
+
+        serializer = RestreamSerializer(new_restream)
+        return Response(serializer.data)
+
 class RestreamViewSet(viewsets.ModelViewSet):
     queryset = Restream.objects.all()
     serializer_class = RestreamSerializer
@@ -55,9 +80,21 @@ class RestreamViewSet(viewsets.ModelViewSet):
             user_profile = get_object_or_404(UserProfile, user=self.request.user)
             return Restream.objects.filter(owner=userProfile)
 
+class RestreamMeLiveView(APIView):
+    def get(self, request):
+        userprofile = get_object_or_404(UserProfile, user=request.user)
+        # Get my restreams
+        # Parse output from /stat, look for my restreams
+        # Store the data somehow
+        
+
 @receiver(post_save, sender=Restream)
 def save_restream_model(sender, instance, **kwargs):
     configs.gen_configs_for_restream(instance)
+
+@receiver(post_delete, sender=Restream)
+def delete_orphans(sender, instance, **kwargs):
+    configs.del_orphan_configs()
 
 @receiver(post_save, sender=StreamEndpoint)
 @receiver(m2m_changed, sender=StreamEndpoint.restream.through) 

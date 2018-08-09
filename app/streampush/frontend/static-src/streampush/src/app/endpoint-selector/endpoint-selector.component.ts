@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
@@ -18,6 +18,7 @@ export class EndpointSelectorComponent implements OnInit, ControlValueAccessor {
   private changed = new Array<(value) => void>();
   private touched = new Array<() => void>();
 
+  @Input('disabled') disabled: boolean;
   public endpoints:any[] = [];
   
   constructor(private apiService: ApiService) { }
@@ -27,6 +28,8 @@ export class EndpointSelectorComponent implements OnInit, ControlValueAccessor {
   }
 
   toggleEndpoint(endpoint) {
+    if (this.disabled) return;
+
     var toToggle = this.endpoints.indexOf(endpoint);
     if (this.endpoints[toToggle]['selected'] == undefined) {
       this.endpoints[toToggle]['selected'] = true;
@@ -56,7 +59,9 @@ export class EndpointSelectorComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(value:any[]) {
-    this.endpoints = value;
+    this.endpoints.forEach((endpoint) => {
+      endpoint.selected = (value.indexOf(endpoint) != -1);
+    });
   }
 
   registerOnChange(fn: (value) => void) {

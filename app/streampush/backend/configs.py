@@ -1,4 +1,4 @@
-import os, datetime, uuid
+import os, datetime, uuid, subprocess
 from backend.models import Restream, StreamEndpoint
 from subprocess import call
 
@@ -38,6 +38,8 @@ def del_orphan_configs():
             print("Deleted orphan config: ", file.name)
             os.unlink(os.path.join(CONFIG_LOCATION, file.name))
 
+    subprocess.Popen(["service", "nginx", "reload"], close_fds=True)
+
 def gen_configs_for_restream(restream): 
     if not os.path.exists(CONFIG_LOCATION):
         print("Generating initial config dir at {0}".format(CONFIG_LOCATION))
@@ -69,9 +71,5 @@ application {0} {{
 
     with open(config_path, "w") as conf_fd:
         conf_fd.write(conf_contents)
-
-    retcode = call(["service", "nginx", "reload"])
-    if retcode != 0:
-        print("Error reloading nginx configs!")
 
     del_orphan_configs()
