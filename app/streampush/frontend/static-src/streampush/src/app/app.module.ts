@@ -3,17 +3,21 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
+import { ChartsModule } from 'ng2-charts';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { RestreamsComponent } from './restreams/restreams.component';
 import { EndpointSelectorComponent } from './endpoint-selector/endpoint-selector.component';
+import { StreamStatsComponent } from './stream-stats/stream-stats.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RestreamsComponent,
-    EndpointSelectorComponent
+    EndpointSelectorComponent,
+    StreamStatsComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +26,8 @@ import { EndpointSelectorComponent } from './endpoint-selector/endpoint-selector
       cookieName: 'csrftoken',
       headerName: 'X-CSRFToken',
     }),
-    FormsModule
+    FormsModule,
+    ChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

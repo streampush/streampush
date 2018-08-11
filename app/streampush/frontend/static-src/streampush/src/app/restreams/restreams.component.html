@@ -5,18 +5,20 @@
   <div *ngIf="restreams.length == 0" class="card-body">
       <div class="alert alert-info" style="margin-bottom: 0px;">Nothing to see here. Why not create a restream below?</div>
   </div>
-  <div class="list-group list-group-flush">
-    <a *ngFor="let restream of restreams" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+  <ul class="list-group list-group-flush">
+    <li *ngFor="let restream of restreams" class="list-group-item list-group-item-action flex-column align-items-start">
       <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1">{{restream.name}}</h5>
-        <div><span class="badge" [ngClass]="{'badge-secondary': !restream.live, 'badge-danger': restream.live}">{{restream.live ? 'LIVE' : 'OFFLINE'}}</span></div>
+        <h5 class="mb-1"><a data-toggle="collapse" [href]="'#statsCollapse-' + restream.id" [attr.data-target]="'#statsCollapse-' + restream.id" aria-expanded="false" [attr.aria-controls]="'statsCollapse-' + restream.id">{{restream.name}}</a></h5>
+        <div><span class="badge" [ngClass]="{'badge-secondary': !restream.live, 'badge-danger live': restream.live}">{{restream.live ? 'LIVE' : 'OFFLINE'}}</span></div>
       </div>
       <p class="mb-1">
-          <i *ngFor="let endpoint of restream.endpoints" data-toggle="tooltip" [attr.title]="endpoint.name" class="endpoint-icon" [ngClass]="endpoint.brand == 'none' ? 'far fa-question-circle' : 'fab fa-'+endpoint.brand"></i>
+        <i *ngFor="let endpoint of restream.endpoints" data-toggle="tooltip" [attr.title]="endpoint.name" class="endpoint-icon" [ngClass]="endpoint.brand == 'none' ? 'far fa-question-circle' : 'fab fa-'+endpoint.brand"></i>
       </p>
-      <small>Some stats</small>
-    </a>
-  </div>
+      <div class="collapse" [id]="'statsCollapse-' + restream.id">
+        <app-stream-stats *ngIf="restream.live" [restream]="restream"></app-stream-stats>
+      </div>
+    </li>
+  </ul>
   <div class="card-footer">
     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#createRestreamModal"><i class="fas fa-plus"></i> Restream</button>
   </div>

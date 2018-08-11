@@ -2,3 +2,14 @@
     font-size: 24px;
     margin: 5px;
 }
+
+.live {
+    -moz-animation: 1500ms breathe ease-in-out infinite;
+    animation: 1500ms breathe ease-in-out infinite;
+}
+  
+@keyframes breathe {
+    0% { background-color: #dc3545; }
+    50% { background-color: #ef0c21; }
+    100% { background-color: #dc3545; }
+}

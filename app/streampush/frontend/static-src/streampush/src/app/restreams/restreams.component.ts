@@ -7,7 +7,7 @@ import { ApiService } from '../api.service';
   styleUrls: ['./restreams.component.css']
 })
 export class RestreamsComponent implements OnInit {
-  restreams:any = []
+  restreams:any[] = [];
 
   @ViewChild('closeBtn') closeBtn: ElementRef;
 
@@ -44,10 +44,30 @@ export class RestreamsComponent implements OnInit {
     
   }
 
+  updateRestream(restream) {
+    var updated = false;
+    for (var i = 0; i < this.restreams.length; i++) {
+      if (this.restreams[i].id == restream.id) {
+        this.restreams[i].live = restream.live;
+        this.restreams[i].endpoint = restream.endpoints;
+        updated = true;
+        break;
+      }
+    }
+
+    if (!updated) {
+      this.restreams.push(restream);
+    }
+  }
+
   pollRestreams() {
     this.apiService.getRestreams()
-    .subscribe((data) => {
-        this.restreams = data;
+    .subscribe((data:any[]) => {
+      if (this.restreams.length == 0) this.restreams = data;
+
+      data.forEach((restream) => {
+        this.updateRestream(restream);
+      });
     });
   }
 

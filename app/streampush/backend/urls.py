@@ -3,7 +3,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 
-from backend import restreams, users, notify, endpoints
+from backend import restreams, users, notify, endpoints, bitrate
 
 router = DefaultRouter()
 router.register(r'restreams', restreams.RestreamViewSet, base_name='restream')
@@ -16,6 +16,7 @@ urlpatterns = [
     url('restreams/create', restreams.RestreamsCreateView.as_view()),
     url('endpoints/me', endpoints.EndpointsMeView.as_view()),
     url('users/me', users.UsersMeView.as_view()),
+    url('bitrate/', bitrate.BitrateView.as_view()),
     url('token', views.obtain_auth_token),
 ] + router.urls
 

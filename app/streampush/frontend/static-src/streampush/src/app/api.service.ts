@@ -65,4 +65,8 @@ export class ApiService extends EventEmitter {
   getEndpoints() {
     return this.get('endpoints/me/');
   }
+
+  getBitrates(restreams) {
+    return this.post('bitrate/', restreams);
+  }
 }

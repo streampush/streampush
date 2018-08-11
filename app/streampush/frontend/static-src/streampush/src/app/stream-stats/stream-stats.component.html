@@ -1,0 +1,15 @@
+<div class="card">
+  <div class="row">
+    <div class="col-md-12">
+      <div style="width: 100%; height: 200px">
+        <canvas baseChart
+                [datasets]="bitrateData"
+                [options]="bitrateChartOptions"
+                [labels]="bitrateLabels"
+                legend="true"
+                chartType="line"
+                *ngIf="bitrateData"></canvas>
+      </div>
+    </div>  
+  </div>
+</div>
