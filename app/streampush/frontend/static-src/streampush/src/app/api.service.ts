@@ -6,7 +6,7 @@ import { EventEmitter } from './event';
   providedIn: 'root'
 })
 export class ApiService extends EventEmitter {
-  basePath:string = "http://localhost:8000/api/v1/"
+  basePath:string = `//${window.location.host}/api/v1/`
   chatSocket:WebSocket
 
   constructor(private http: HttpClient) {

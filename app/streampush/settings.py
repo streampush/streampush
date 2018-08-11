@@ -80,7 +80,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
-
+ASGI_APPLICATION = 'streampush.routing.APPLICATION'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
