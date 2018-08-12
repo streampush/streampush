@@ -30,6 +30,7 @@ RUN cd /tmp/build/nginx/${NGINX_VERSION} && \
     make install && \
     mkdir /var/lock/nginx && \
     cp /tmp/build/nginx-rtmp-module/stat.xsl /usr/local/nginx/html/stat.xsl && \
+    ln -s /usr/local/nginx/sbin/nginx /sbin/nginx && \
     rm -rf /tmp/build
 
 # Forward logs to Docker
@@ -50,14 +51,16 @@ RUN mkdir -p /var/log/nginx/
 # Make link to code directory
 RUN mkdir /opt/streampush
 RUN mkdir /opt/streampush/app
+RUN mkdir /opt/streampush/data
+VOLUME /opt/streampush/data
 
 # Move over the app code
 COPY app /opt/streampush/app
 
 # Build the frontend
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
-    apt-get install -y nodejs build-essential && \
-    npm i -g @angular/cli
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get install -y nodejs build-essential
+RUN npm i -g @angular/cli
 
 RUN cd /opt/streampush/app/streampush/frontend/static-src/streampush && \
     npm i && \

@@ -17,10 +17,13 @@ service redis-server start
 # fi
 # echo "started redis-server"
 
-python3 /opt/streampush/app/streampush/manage.py migrate
+cd /opt/streampush/app/streampush
+
+export DJANGO_SETTINGS_MODULE=streampush.settings-prod
+python3 manage.py migrate
 
 # python3 /opt/streampush/app/streampush/manage.py runserver &
-cd /opt/streampush/app/streampush && daphne -b 0.0.0.0 -p 8000 streampush.asgi:application &
+daphne -b 0.0.0.0 -p 8000 streampush.asgi:application &
 status=$?
 if [ $status -ne 0 ]; then
   echo "Failed to start Streampush: $status"

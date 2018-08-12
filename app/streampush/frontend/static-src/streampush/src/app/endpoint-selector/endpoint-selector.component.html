@@ -5,9 +5,26 @@
       <div *ngFor="let endpoint of endpoints" class="card endpointCard" [ngClass]="{'bg-success text-white': endpoint.selected}" (click)="toggleEndpoint(endpoint)">
         <div class="card-body d-flex">
           <i class="endpointBrand card-img-top flex-shrink-5" [ngClass]="endpoint.brand == 'none' ? 'far fa-question-circle' : 'fab fa-'+endpoint.brand"></i>
-          <p class="endpointName w-100">{{endpoint.name}}</p>
+          <p class="endpointName w-100 noselect">{{endpoint.name}}</p>
         </div>
       </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Add an endpoint</h6>
+        <div *ngIf="newEndpoint.error" class="alert alert-danger">{{newEndpoint.error}}</div>
+        <div class="input-group">
+          <div class="input-group-prepend" *ngIf="newEndpoint.brand">
+            <span class="input-group-text">
+              <i [ngClass]="newEndpoint.brand"></i>
+            </span>
+          </div>
+          <input type="text" class="form-control" placeholder="RTMP URL" [(ngModel)]="newEndpoint.url" (ngModelChange)="newUrlChanged($event)" />
+          <input type="text" class="form-control" placeholder="Endpoint Name" [(ngModel)]="newEndpoint.name">
+          <div class="input-group-append">
+            <button class="btn btn-outline-success" type="button" (click)="createEndpoint()" [disabled]="newEndpoint.adding || !newEndpoint.url">Add</button>
+          </div>
+        </div>
     </div>
   </div>
 </div>

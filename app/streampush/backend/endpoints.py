@@ -46,3 +46,19 @@ class EndpointViewSet(viewsets.ModelViewSet):
         else:
             user_profile = get_object_or_404(UserProfile, user=self.request.user)
             return StreamEndpoint.objects.filter(owner=userProfile)
+
+class EndpointCreateView(APIView):
+    def post(self, request):
+        if not "name" in request.data or not "url" in request.data:
+            return Response({"err": "Name is missing"}, status=400)
+        
+        owner = get_object_or_404(UserProfile, user=request.user)
+
+        new_endpoint = StreamEndpoint();
+        new_endpoint.name = request.data["name"]
+        new_endpoint.url = request.data["url"]
+        new_endpoint.owner = owner
+        new_endpoint.save()
+
+        serializer = StreamEndpointSerializer(new_endpoint)
+        return Response(serializer.data)

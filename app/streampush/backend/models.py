@@ -27,7 +27,7 @@ class Restream(models.Model):
     owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 
     live = models.BooleanField(default=False)
-    lastStreamed = models.DateTimeField(null=True)
+    lastStreamed = models.DateTimeField(null=True, blank=True)
 
     @property
     def endpoints(self):
@@ -43,7 +43,7 @@ class StreamEndpoint(models.Model):
     url = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
     owner = models.ForeignKey(UserProfile, null=True, on_delete=models.CASCADE)
-    restream = models.ManyToManyField(Restream)
+    restream = models.ManyToManyField(Restream, null=True, blank=True)
 
     @property
     def brand(self):

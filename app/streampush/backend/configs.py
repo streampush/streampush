@@ -38,7 +38,7 @@ def del_orphan_configs():
             print("Deleted orphan config: ", file.name)
             os.unlink(os.path.join(CONFIG_LOCATION, file.name))
 
-    subprocess.Popen(["service", "nginx", "reload"], close_fds=True)
+    subprocess.Popen(["nginx", "-s", "reload"], close_fds=True)
 
 def gen_configs_for_restream(restream): 
     if not os.path.exists(CONFIG_LOCATION):

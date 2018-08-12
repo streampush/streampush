@@ -7,9 +7,9 @@
 }
 
 .endpointName {
-    vertical-align: middle;
     text-align: center;
     margin-bottom: 0px;
+    line-height: 32px;
 }
 
 .endpointCard {

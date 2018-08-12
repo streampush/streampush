@@ -21,6 +21,14 @@ export class EndpointSelectorComponent implements OnInit, ControlValueAccessor {
   @Input('disabled') disabled: boolean;
   public endpoints:any[] = [];
   
+  public newEndpoint = {
+    brand: undefined,
+    url: undefined,
+    name: undefined,
+    adding: false,
+    error: undefined
+  };
+  
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
@@ -70,5 +78,38 @@ export class EndpointSelectorComponent implements OnInit, ControlValueAccessor {
 
   registerOnTouched(fn: () => void) {
     this.touched.push(fn);
+  }
+
+  newUrlChanged(newVal) {
+    const brandMap = {
+      "twitch.tv": "fab fa-twitch",
+      "facebook.com": "fab fa-facebook",
+      "youtube.com": "fab fa-youtube",
+    };
+    var found = false;
+    Object.keys(brandMap).forEach((url) => {
+      if (newVal.indexOf(url) != -1) {
+        this.newEndpoint.brand = brandMap[url];
+        found = true;
+      }
+    });
+    if (!found) this.newEndpoint.brand = undefined;
+  }
+
+  createEndpoint() {
+    this.newEndpoint.error = undefined;
+    this.newEndpoint.adding = true;
+    
+    this.apiService.createEndpoint(this.newEndpoint.name, this.newEndpoint.url)
+    .subscribe((data:any) => {
+      this.newEndpoint.adding = false;
+      this.newEndpoint.url = undefined;
+      this.newEndpoint.brand = undefined;
+      this.newEndpoint.name = undefined;
+      this.pollEndpoints();
+    }, (error) => {
+      this.newEndpoint.adding = false;
+      this.newEndpoint.error = error.err;
+    });
   }
 }
