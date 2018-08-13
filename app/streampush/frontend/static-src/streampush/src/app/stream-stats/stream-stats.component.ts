@@ -78,12 +78,12 @@ export class StreamStatsComponent implements OnInit {
         var whereToInsert = this.getBitrateDataIdx(endpoint.id, dataCopy);
         if (whereToInsert == -1) {
           dataCopy.push({
-            data: [ endpoint.out ],
+            data: [ endpoint.in ],
             label: endpoint.name,
             id: endpoint.id
           })
         } else {
-          dataCopy[whereToInsert].data.push(endpoint.out);
+          dataCopy[whereToInsert].data.push(endpoint.in);
           if (dataCopy[whereToInsert].data.length > 20) {
             dataCopy[whereToInsert].data.shift()
           }

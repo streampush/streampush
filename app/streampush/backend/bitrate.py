@@ -1,3 +1,7 @@
+import requests
+
+from xml.etree import ElementTree
+
 from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
@@ -13,15 +17,24 @@ class BitrateView(APIView):
             return Response({"err": "restreamId must be provided"})
 
         restream = get_object_or_404(Restream, pk=request.data['restreamId'])
-        endpoints = StreamEndpoint.objects.filter(restream=restream)
+        restream_id = restream.id
 
-        fake_data = []
-        for endpoint in endpoints:
-            fake_data.append({
-                "name": endpoint.name,
-                "id": endpoint.id,
-                "in": random.randint(1500, 2500),
-                "out": random.randint(1500, 2500),
-            })
+        r = requests.get("http://127.0.0.1/stat/")
+        data = r.json()
 
-        return Response(fake_data)
+        restream_stats = [x for x in data['rtmp']['servers'][0] if str(restream_id) in x['name']]
+
+        if len(restream_stats) == 0:
+            return Response([])
+
+        if len(restream_stats[0]['live']['streams']) == 0:
+            return Response([])
+
+        stats = []
+        stats.append({
+            "name": restream.name,
+            "id": restream.id,
+            "in": restream_stats[0]['live']['streams'][0]['bw_in']
+        })            
+
+        return Response(stats)

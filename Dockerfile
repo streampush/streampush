@@ -1,12 +1,15 @@
 FROM buildpack-deps:stretch
 
-# Versions of Nginx and nginx-rtmp-module to use
 ENV NGINX_VERSION nginx-1.10.3
-ENV NGINX_RTMP_MODULE_VERSION 1.2.1
+
+# Install pip
+RUN apt-get update && apt-get install -y python3-dev
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN python3 get-pip.py
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y ca-certificates build-essential openssl libssl-dev libpcre3 libpcre3-dev && \
+    apt-get install -y ca-certificates build-essential openssl libssl-dev libpcre3 libpcre3-dev sudo unzip && \
     rm -rf /var/lib/apt/lists/*
 
 # Download and decompress Nginx
@@ -16,8 +19,12 @@ RUN mkdir -p /tmp/build/nginx && \
     tar -zxf ${NGINX_VERSION}.tar.gz
 
 # Download and decompress RTMP module
+# Apply patch for JSON stat output
 RUN cd /tmp/build && \
-    git clone git://github.com/arut/nginx-rtmp-module.git
+    git clone git://github.com/arut/nginx-rtmp-module.git && \
+    cd nginx-rtmp-module && \
+    wget https://patch-diff.githubusercontent.com/raw/arut/nginx-rtmp-module/pull/815.patch && \
+    patch < 815.patch
 
 # Build and install Nginx
 # The default puts everything under /usr/local/nginx, so it's needed to change
@@ -33,15 +40,20 @@ RUN cd /tmp/build/nginx/${NGINX_VERSION} && \
     ln -s /usr/local/nginx/sbin/nginx /sbin/nginx && \
     rm -rf /tmp/build
 
-# Forward logs to Docker
-#RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
-#    ln -sf /dev/stderr /var/log/nginx/error.log
+# # Forward logs to Docker
+# #RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
+# #    ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Install redis server
 RUN echo "deb http://ftp.utexas.edu/dotdeb/ stable all \
 deb-src http://ftp.utexas.edu/dotdeb/ stable all" > /etc/apt/sources.list.d/dotdeb.list && \
     wget https://www.dotdeb.org/dotdeb.gpg && apt-key add dotdeb.gpg && \
     apt-get update && apt-get install -y redis-server
+
+# Build the frontend
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get install -y nodejs build-essential
+RUN npm i -g @angular/cli
 
 # Copy streampush configs
 COPY docker/nginx.conf /usr/local/nginx/conf/nginx.conf
@@ -57,11 +69,6 @@ VOLUME /opt/streampush/data
 # Move over the app code
 COPY app /opt/streampush/app
 
-# Build the frontend
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get install -y nodejs build-essential
-RUN npm i -g @angular/cli
-
 RUN cd /opt/streampush/app/streampush/frontend/static-src/streampush && \
     npm i && \
     ng build
@@ -71,20 +78,9 @@ COPY docker/supervisor.sh /opt/streampush/supervisor.sh
 RUN chmod +x /opt/streampush/supervisor.sh
 
 # Install requirements
-RUN apt-get update && apt-get install -y python3-dev
-RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-RUN python3 get-pip.py
 RUN pip3 install -r /opt/streampush/app/requirements.txt
 
 EXPOSE 80
 EXPOSE 443
 EXPOSE 1935
 CMD ["/opt/streampush/supervisor.sh"]
-
-#FROM python:3
-#ENV PYTHONUNBUFFERED 1
-#RUN mkdir /opt/streampush
-#WORKDIR /app
-#ADD requirements.txt /opt/streampush/
-#RUN pip install -r requirements.txt
-#ADD . /opt/streampush/

@@ -38,8 +38,6 @@ def del_orphan_configs():
             print("Deleted orphan config: ", file.name)
             os.unlink(os.path.join(CONFIG_LOCATION, file.name))
 
-    subprocess.Popen(["nginx", "-s", "reload"], close_fds=True)
-
 def gen_configs_for_restream(restream): 
     if not os.path.exists(CONFIG_LOCATION):
         print("Generating initial config dir at {0}".format(CONFIG_LOCATION))
@@ -73,3 +71,8 @@ application {0} {{
         conf_fd.write(conf_contents)
 
     del_orphan_configs()
+
+def gen_all_configs():
+    for restream in Restream.objects.all():
+        gen_configs_for_restream(restream)
+    subprocess.Popen("nginx -s quit && nginx", shell=True)

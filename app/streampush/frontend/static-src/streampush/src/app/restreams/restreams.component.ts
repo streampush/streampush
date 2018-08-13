@@ -68,6 +68,18 @@ export class RestreamsComponent implements OnInit {
       data.forEach((restream) => {
         this.updateRestream(restream);
       });
+  
+      this.restreams.sort((a, b) => {
+        if (a.live && !b.live) return -1;
+        if (b.live && !a.live) return 1;
+        if ((a.live && b.live) || (!a.live && !b.live)) {
+          var aName = a.name.toUpperCase();
+          var bName = b.name.toUpperCase();
+          if (aName < bName) return 1;
+          if (aName > bName) return -1;
+        }
+        return 0;
+      });
     });
   }
 

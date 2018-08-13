@@ -1,4 +1,4 @@
-import json
+import json, subprocess
 
 from django.shortcuts import get_object_or_404
 
@@ -91,10 +91,12 @@ class RestreamMeLiveView(APIView):
 @receiver(post_save, sender=Restream)
 def save_restream_model(sender, instance, **kwargs):
     configs.gen_configs_for_restream(instance)
+    subprocess.Popen("nginx -s quit && nginx", shell=True)
 
 @receiver(post_delete, sender=Restream)
 def delete_orphans(sender, instance, **kwargs):
     configs.del_orphan_configs()
+    subprocess.Popen("nginx -s quit && nginx", shell=True)
 
 @receiver(post_save, sender=StreamEndpoint)
 @receiver(m2m_changed, sender=StreamEndpoint.restream.through) 
@@ -104,3 +106,4 @@ def save_restream_model_by_endpoint(sender, instance, **kwargs):
     # for restream in instance.restream.all():
     for restream in Restream.objects.all():
         configs.gen_configs_for_restream(restream)
+    subprocess.Popen("nginx -s quit && nginx", shell=True)

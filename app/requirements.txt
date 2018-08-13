@@ -5,3 +5,4 @@ channels_redis
 django-cors-headers
 djangorestframework
 daphne
+requests
