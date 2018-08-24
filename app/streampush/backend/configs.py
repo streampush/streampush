@@ -75,4 +75,4 @@ application {0} {{
 def gen_all_configs():
     for restream in Restream.objects.all():
         gen_configs_for_restream(restream)
-    subprocess.Popen("nginx -s quit && nginx", shell=True)
+    subprocess.call("/usr/bin/pkill -f nginx; /usr/local/nginx/sbin/nginx", shell=True)

@@ -1,6 +1,5 @@
 <div class="card">
-  <div *ngIf="endpoints.length == 0" class="card-footer" style="border-top: 0;">Well, it looks like you have no endpoints configured. Wanna <button class="btn btn-sm btn-success">create one now</button>?</div>
-  <div *ngIf="endpoints.length > 0" class="card-body">
+  <div class="card-body">
     <div class="card-columns">
       <div *ngFor="let endpoint of endpoints" class="card endpointCard" [ngClass]="{'bg-success text-white': endpoint.selected}" (click)="toggleEndpoint(endpoint)">
         <div class="card-body d-flex">

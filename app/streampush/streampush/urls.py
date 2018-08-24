@@ -30,5 +30,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-from backend import configs
-configs.gen_all_configs()
+try:
+    from backend import configs
+    configs.gen_all_configs()
+except:
+    print("Error regenerating configs. This is normal on first start.")
