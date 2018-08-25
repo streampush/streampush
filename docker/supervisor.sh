@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/ash
 
-/usr/local/nginx/sbin/nginx
+/usr/sbin/nginx
 status=$?
 if [ $status -ne 0 ]; then
   echo "Failed to start nginx: $status"
@@ -8,14 +8,13 @@ if [ $status -ne 0 ]; then
 fi
 echo "started nginx"
 
-service redis-server start
-# /usr/bin/redis-server &
-# status=$?
-# if [ $status -ne 0 ]; then
-#   echo "Failed to start redis-server: $status"
-#   exit $status
-# fi
-# echo "started redis-server"
+/usr/bin/redis-server &
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to start redis-server: $status"
+  exit $status
+fi
+echo "started redis-server"
 
 cd /opt/streampush/app/streampush
 
@@ -30,6 +29,14 @@ if [ $status -ne 0 ]; then
   exit $status
 fi
 
+cd /opt/streampush/relay/ && /usr/bin/relay
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to start relay: $status"
+  exit $status
+fi
+echo "started relay"
+
 echo "started streampush"
 
 while sleep 60; do
@@ -39,9 +46,11 @@ while sleep 60; do
   DAPHNE_STATUS=$?
   ps aux |grep redis-server |grep -q -v grep
   REDIS_STATUS=$?
+  ps aux |grep relay |grep -q -v grep
+  RELAY_STATUS=$?
   # If the greps above find anything, they exit with 0 status
   # If they are not both 0, then something is wrong
-  if [ $NGINX_STATUS -ne 0 -o $DAPHNE_STATUS -ne 0 -o $REDIS_STATUS -ne 0 ]; then
+  if [ $NGINX_STATUS -ne 0 -o $DAPHNE_STATUS -ne 0 -o $REDIS_STATUS -ne 0 -o $RELAY_STATUS -ne 0 ]; then
     echo "Something died."
     exit 1
   fi

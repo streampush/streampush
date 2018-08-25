@@ -17,24 +17,24 @@ class BitrateView(APIView):
             return Response({"err": "restreamId must be provided"})
 
         restream = get_object_or_404(Restream, pk=request.data['restreamId'])
-        restream_id = restream.id
+        restream_id = str(restream.id)
 
-        r = requests.get("http://127.0.0.1/stat/")
+        r = requests.get("http://127.0.0.1:8888/api/stats")
         data = r.json()
 
-        restream_stats = [x for x in data['rtmp']['servers'][0] if str(restream_id) in x['name']]
+        restream_stats = data[restream_id]["stats"]
 
-        if len(restream_stats) == 0:
-            return Response([])
-
-        if len(restream_stats[0]['live']['streams']) == 0:
-            return Response([])
+        if not restream_stats:
+            return Response({
+                "error": "no stats available"
+            })
 
         stats = []
         stats.append({
             "name": restream.name,
             "id": restream.id,
-            "in": restream_stats[0]['live']['streams'][0]['bw_in']
+            "in": restream_stats["bitrate"],
+            "endpoints": restream_stats["endpoints"]
         })            
 
         return Response(stats)

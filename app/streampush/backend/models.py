@@ -1,4 +1,6 @@
 import uuid
+from json import JSONEncoder
+from uuid import UUID
 from django.db import models
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
@@ -40,10 +42,11 @@ class Restream(models.Model):
 # A stream endpoint that'll be used when generating
 # restream configs.
 class StreamEndpoint(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     url = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
     owner = models.ForeignKey(UserProfile, null=True, on_delete=models.CASCADE)
-    restream = models.ManyToManyField(Restream, null=True, blank=True)
+    restream = models.ManyToManyField(Restream, blank=True)
 
     @property
     def brand(self):
@@ -58,3 +61,13 @@ class StreamEndpoint(models.Model):
 
     def __str__(self):
         return "{0}@{1}".format(self.url, self.restream.__str__())
+
+
+'''
+Dealing with no UUID serialization support in json
+'''
+JSONEncoder_olddefault = JSONEncoder.default
+def JSONEncoder_newdefault(self, o):
+    if isinstance(o, UUID): return str(o)
+    return JSONEncoder_olddefault(self, o)
+JSONEncoder.default = JSONEncoder_newdefault
