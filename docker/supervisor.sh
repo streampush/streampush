@@ -22,7 +22,7 @@ export DJANGO_SETTINGS_MODULE=streampush.settings-prod
 python3 manage.py migrate
 
 # python3 /opt/streampush/app/streampush/manage.py runserver &
-daphne -b 0.0.0.0 -p 8000 streampush.asgi:application &
+daphne -b 0.0.0.0 -p 8000 --proxy-headers streampush.asgi:application &
 status=$?
 if [ $status -ne 0 ]; then
   echo "Failed to start Streampush: $status"

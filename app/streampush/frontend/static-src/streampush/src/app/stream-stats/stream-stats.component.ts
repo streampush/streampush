@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts/ng2-charts';
 import { ApiService } from '../api.service';
+import 'chartjs-plugin-streaming'
 
 @Component({
   selector: 'app-stream-stats',
@@ -14,23 +15,32 @@ export class StreamStatsComponent implements OnInit {
   @Input('restream') restream: object;
   @Input('visible') visible: boolean;
 
-  public bitrateData:Array<any>;
-  public bitrateLabels:Array<any> = [];
+  public getBrand
+  objectValues = Object.values;
+
+  public apiData:object;
+  public restreamEvents:any[] = [];
+
+  public bitrateData:Array<any> = [{
+    label: 'Inbound Bitrate',
+    data: []
+  }]
 
   public bitrateChartOptions = {
     scales: {
       xAxes: [{
-          time: {
-            unit: 'minute'
-          }
+          type: 'time'
       }]
     },
-    animation: {
-      easing: 'linear',
-      duration: 1250
-    },
     responsive: true,
-    maintainAspectRatio: false
+    maintainAspectRatio: false,
+    plugins: {
+      streaming: {
+        onRefresh: null,
+        delay: 2000,
+        duration: 30 * 1000
+      }
+    }
   }
 
   /**
@@ -47,7 +57,21 @@ export class StreamStatsComponent implements OnInit {
    */
 
   constructor(private apiService:ApiService) {
+    this.getBrand = apiService.getBrand
+    
+    var self = this;
+    this.bitrateChartOptions.plugins.streaming.onRefresh = function(chart) {
+      self.apiService.getBitrates({
+        "restreamId": self.restream['id']
+      }).subscribe((newData:object) => {
+        self.apiData = newData;
 
+        chart.data.datasets[0].data.push({
+          x: Date.now(),
+          y: parseFloat(self.apiData["in"])
+        });
+      })
+    }
   }
 
   getBitrateDataIdx(endpointId, dataArray) {
@@ -60,48 +84,9 @@ export class StreamStatsComponent implements OnInit {
     return (found ? i : -1);
   }
 
-  pollBitrates() {
-    this.apiService.getBitrates({
-      "restreamId": this.restream['id']
-    }).subscribe((newData:any[]) => {
-      var dataCopy;
-      if (this.bitrateData == undefined) {
-        dataCopy = [];
-      } else {
-        dataCopy = this.bitrateData;
-      }
-
-      var curDate:any = new Date();
-      curDate = `${curDate.getMinutes()}:${curDate.getSeconds()}`;
-
-      newData.forEach((endpoint) => {
-        var whereToInsert = this.getBitrateDataIdx(endpoint.id, dataCopy);
-        if (whereToInsert == -1) {
-          dataCopy.push({
-            data: [ endpoint.in ],
-            label: endpoint.name,
-            id: endpoint.id
-          })
-        } else {
-          dataCopy[whereToInsert].data.push(endpoint.in);
-          if (dataCopy[whereToInsert].data.length > 20) {
-            dataCopy[whereToInsert].data.shift()
-          }
-        }
-      });
-      
-      this.bitrateLabels.push(curDate);
-      if (this.bitrateLabels.length > 20) this.bitrateLabels.shift();
-      this.bitrateData = dataCopy;
-
-      console.log(this.bitrateLabels)
-      console.log(this.bitrateData)
-      this.bitrateChart.chart.update();
-    })
-  }
-
   ngOnInit() {
-    setInterval(this.pollBitrates.bind(this), 1000);
-    this.pollBitrates();
+    this.apiService.on("event", (data) => {
+      this.restreamEvents.push(data)
+    })
   }
 }

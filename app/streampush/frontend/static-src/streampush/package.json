@@ -24,6 +24,7 @@
     "@angular/router": "^6.1.0",
     "@types/node": "^10.5.8",
     "chart.js": "^2.7.2",
+    "chartjs-plugin-streaming": "^1.6.0",
     "core-js": "^2.5.4",
     "ng2-charts": "^1.6.0",
     "rxjs": "^6.0.0",

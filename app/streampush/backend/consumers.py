@@ -8,7 +8,11 @@ class NotifyConsumer(WebsocketConsumer):
         print(dir(self.scope))
         print(self.scope.keys())
 
+        print(self.scope["client"])
+        print(self.scope["headers"])
+
         user = self.scope['user']
+        
         if not user.is_authenticated:
             self.close()
         else:
@@ -34,9 +38,6 @@ class NotifyConsumer(WebsocketConsumer):
 
     def publish(self, event):
         restreamId = event['restreamId']
-
-
-
         self.send(text_data=json.dumps({
             'type': 'publish',
             'restreamId': restreamId
@@ -47,4 +48,12 @@ class NotifyConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({
             'type': 'publish_done',
             'restreamId': restreamId
+        }))
+
+    def event(self, event):
+        restreamId = event['restreamId']
+        self.send(text_data=json.dumps({
+            'type': 'event',
+            'restreamId': restreamId,
+            'data': event
         }))

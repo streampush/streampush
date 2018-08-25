@@ -76,4 +76,15 @@ export class ApiService extends EventEmitter {
   getBitrates(restreams) {
     return this.post('bitrate/', restreams);
   }
+
+  getBrand(string) {
+    var brand = "none"
+    if (string.indexOf("twitch.tv") != -1)
+      brand = "twitch"
+    else if (string.indexOf("facebook.com") != -1)
+      brand = "facebook"
+    else if (string.indexOf("youtube.com")  != -1)
+      brand = "youtube"
+    return brand
+  }
 }

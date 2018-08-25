@@ -7,6 +7,7 @@ from rest_framework.authtoken.models import Token
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from backend.helpers import getBrand
 
 # Custom user profile with some dope metadata
 class UserProfile(models.Model):
@@ -50,14 +51,7 @@ class StreamEndpoint(models.Model):
 
     @property
     def brand(self):
-        brand = "none"
-        if "twitch.tv" in self.url:
-            brand = "twitch"
-        elif "facebook.com" in self.url:
-            brand = "facebook"
-        elif "youtube.com" in self.url:
-            brand = "youtube"
-        return brand
+        return getBrand(self.url)
 
     def __str__(self):
         return "{0}@{1}".format(self.url, self.restream.__str__())

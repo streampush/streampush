@@ -14,7 +14,7 @@ class NotifyAPI(APIView):
         if not notify_type or not app_id:
             return Response("ERROR", status=403)
 
-        print("Checking for restream with ID {0}".format(app_id))
+        print("Checking for restream with ID {0}".format(app_id)) 
         cur_restream = get_object_or_404(Restream, id=request.POST.get('app'))
         owner = cur_restream.owner
 
