@@ -23,7 +23,7 @@ from streampush import settings
 
 urlpatterns = [
     path('', app_view),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(), {'next_page': '/'}, name='logout'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('api/v1/', include(('backend.urls', 'backend'))),
 

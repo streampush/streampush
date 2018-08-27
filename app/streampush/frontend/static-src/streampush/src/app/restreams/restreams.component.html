@@ -6,7 +6,7 @@
       <div class="alert alert-info" style="margin-bottom: 0px;">Nothing to see here. Why not create a restream below?</div>
   </div>
   <ul class="list-group list-group-flush">
-    <li *ngFor="let restream of restreams" class="list-group-item list-group-item-action flex-column align-items-start">
+    <li *ngFor="let restream of restreams" class="list-group-item flex-column align-items-start">
       <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1">{{restream.name}}</h5>
         <div><span class="badge" [ngClass]="{'badge-secondary': !restream.live, 'badge-danger live': restream.live}">{{restream.live ? 'LIVE' : 'OFFLINE'}}</span></div>

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter } from './event';
+import ReconnectingWebSocket from 'reconnectingwebsocket'
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService extends EventEmitter {
   basePath:string = `//${window.location.host}/api/v1/`
-  chatSocket:WebSocket
+  notifySocket:WebSocket
 
   constructor(private http: HttpClient) {
     super();
@@ -15,9 +16,9 @@ export class ApiService extends EventEmitter {
   }
 
   _initWebSocket() {
-    this.chatSocket = new WebSocket(`ws://${window.location.host}/ws/notify`);
+    this.notifySocket = new ReconnectingWebSocket(`ws://${window.location.host}/ws/notify`);
     
-    this.chatSocket.onmessage = (msg) => {
+    this.notifySocket.onmessage = (msg) => {
       var data = JSON.parse(msg['data']);
       if (!data) {
         console.log('Invalid message received');
@@ -27,13 +28,17 @@ export class ApiService extends EventEmitter {
       this.emit(data.type, data);
     }
     
-    this.chatSocket.onopen = (msg) => {
+    this.notifySocket.onopen = (msg) => {
       this.emit('connected');
     }
 
-    this.chatSocket.onclose = (msg) => {
+    this.notifySocket.onclose = (msg) => {
       this.emit('disconnected');
     }
+  }
+
+  wsConnected() {
+    return this.notifySocket.readyState == 1;
   }
 
   getCookie(name) {
@@ -86,5 +91,9 @@ export class ApiService extends EventEmitter {
     else if (string.indexOf("youtube.com")  != -1)
       brand = "youtube"
     return brand
+  }
+
+  getBackendStatus() {
+    return this.get('status')
   }
 }
