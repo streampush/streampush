@@ -41,4 +41,12 @@ export class BackendStatsComponent implements OnInit {
       }
     }, 1000);
   }
+
+  tryLogout() {
+    this.apiService.logout().subscribe((success) => {
+      window.location.reload()
+    }, (error) => {
+      alert("Error logging out. This shouldn't happen.");
+    })
+  }
 }

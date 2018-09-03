@@ -11,10 +11,15 @@
         <h5 class="mb-1">{{restream.name}}</h5>
         <div><span class="badge" [ngClass]="{'badge-secondary': !restream.live, 'badge-danger live': restream.live}">{{restream.live ? 'LIVE' : 'OFFLINE'}}</span></div>
       </div>
-      <p class="mb-1">
-        <i *ngFor="let endpoint of restream.endpoints" data-toggle="tooltip" [attr.title]="endpoint.name" class="endpoint-icon" [ngClass]="endpoint.brand == 'none' ? 'far fa-question-circle' : 'fab fa-'+endpoint.brand"></i>
-      </p>
-      <div *ngIf="restream.live">
+      <div class="d-flex w-100 justify-content-between">
+        <span class="mb-1">
+          <i *ngFor="let endpoint of restream.endpoints" data-toggle="tooltip" [attr.title]="endpoint.name" class="endpoint-icon" [ngClass]="endpoint.brand == 'none' ? 'far fa-question-circle' : 'fab fa-'+endpoint.brand"></i>
+        </span>
+        <div class="input-group w-25">
+          <input type="text" class="form-control" [attr.value]="rtmpPrefix + restream.id" disabled>
+        </div>
+      </div>
+      <div *ngIf="restream.live" class="mt-3">
         <app-stream-stats [restream]="restream"></app-stream-stats>
       </div>
     </li>

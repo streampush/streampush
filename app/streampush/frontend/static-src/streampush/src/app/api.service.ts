@@ -9,6 +9,7 @@ import ReconnectingWebSocket from 'reconnectingwebsocket'
 export class ApiService extends EventEmitter {
   basePath:string = `//${window.location.host}/api/v1/`
   notifySocket:WebSocket
+  loggedIn:boolean = false
 
   constructor(private http: HttpClient) {
     super();
@@ -50,6 +51,10 @@ export class ApiService extends EventEmitter {
     return this.http.get(this.basePath + endpoint)
   }
 
+  delete(endpoint) {
+    return this.http.delete(this.basePath + endpoint)
+  }
+
   post(endpoint, data) {
     return this.http.post(this.basePath + endpoint, data, {
       headers: {
@@ -68,6 +73,28 @@ export class ApiService extends EventEmitter {
       url,
       name
     });
+  }
+
+  checkLogin(cb) {
+    this.getRestreams().subscribe((data) => {
+      this.loggedIn = true;
+      cb(this.loggedIn);
+    }, (err) => {
+      this.loggedIn = false;
+      cb(this.loggedIn);
+    })
+  }
+
+  login(username, password) {
+    return this.post('auth', {
+      username,
+      password
+    })
+  }
+
+  logout() {
+    this.notifySocket.close()
+    return this.delete('auth')
   }
 
   getRestreams() {

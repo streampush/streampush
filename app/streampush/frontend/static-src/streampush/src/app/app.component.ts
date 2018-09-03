@@ -8,11 +8,16 @@ import { ApiService } from './api.service';
 })
 export class AppComponent implements OnInit {
   title: string = "streampush"
-  loggedIn: boolean = true
+  loggedIn: boolean = false
+  loading: boolean = true
 
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    // We should store auth token stuff locally or something
+    this.apiService.checkLogin((loggedIn) => {
+      this.loading = false;
+      this.loggedIn = loggedIn;
+      console.log(`Logged in: ${loggedIn}`)
+    });
   }
 }
