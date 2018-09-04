@@ -20,7 +20,8 @@ urlpatterns = [
     url('bitrate/', bitrate.BitrateView.as_view()),
     url('token', views.obtain_auth_token),
     url('status', status.StatusView.as_view()),
-    url('auth', auth.AuthView.as_view())
+    url('auth', auth.AuthView.as_view()),
+    url('setup', auth.SetupView.as_view())
 ] + router.urls
 
 # urlpatterns = [

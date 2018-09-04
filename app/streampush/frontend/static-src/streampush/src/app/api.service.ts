@@ -75,11 +75,27 @@ export class ApiService extends EventEmitter {
     });
   }
 
+  setup(username, email, password) {
+    return this.post('setup', {
+      username,
+      email,
+      password
+    });
+  }
+
   checkLogin(cb) {
-    this.getRestreams().subscribe((data) => {
+    this.getBackendStatus().subscribe((data) => {
       this.loggedIn = true;
       cb(this.loggedIn);
     }, (err) => {
+      console.log('err')
+      console.log(err)
+
+      if (err.status == 404) {
+        cb("setup");
+        return;
+      }
+
       this.loggedIn = false;
       cb(this.loggedIn);
     })

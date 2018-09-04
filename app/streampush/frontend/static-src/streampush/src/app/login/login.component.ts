@@ -22,6 +22,8 @@ export class LoginComponent implements OnInit {
     this.apiService.login(this.username, this.password).subscribe((success) => {
       window.location.reload();
     }, (error) => {
+      console.log(error)
+
       this.loading = false;
       this.username = "";
       this.password = "";

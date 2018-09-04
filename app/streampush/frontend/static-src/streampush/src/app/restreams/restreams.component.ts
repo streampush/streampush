@@ -63,6 +63,11 @@ export class RestreamsComponent implements OnInit {
     }
   }
 
+  showKey(restream) {
+    if (!restream["showKey"]) restream["showKey"] = false;
+    restream.showKey = !restream.showKey;
+  }
+
   pollRestreams() {
     this.apiService.getRestreams()
     .subscribe((data:any[]) => {
@@ -72,6 +77,7 @@ export class RestreamsComponent implements OnInit {
         this.updateRestream(restream);
       });
   
+      // Sorting live streams above offline streams
       this.restreams.sort((a, b) => {
         if (a.live && !b.live) return -1;
         if (b.live && !a.live) return 1;

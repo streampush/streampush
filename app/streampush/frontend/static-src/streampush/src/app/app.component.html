@@ -12,21 +12,31 @@
   </div>
 </div>
 
-<div *ngIf="loggedIn && !loading" class="container">
-  <div class="row" style="margin-top: 50px;">
-    <div class="col-sm-9">
-      <app-restreams></app-restreams>
-    </div>
-    <div class="col-sm-3">
-      <app-backend-stats></app-backend-stats>
+<div *ngIf="setup" class="container">
+  <div class="row align-items-center justify-content-center" style="margin-top: 50px;">
+    <div class="col-sm-6">
+      <app-setup></app-setup>
     </div>
   </div>
 </div>
 
-<div *ngIf="!loggedIn && !loading" class="container">
-  <div class="row align-items-center justify-content-center" style="margin-top: 50px;">
-    <div class="col-sm-6">
-      <app-login></app-login>
+<div *ngIf="!setup">
+  <div *ngIf="loggedIn && !loading" class="container">
+    <div class="row" style="margin-top: 50px;">
+      <div class="col-sm-9">
+        <app-restreams></app-restreams>
+      </div>
+      <div class="col-sm-3">
+        <app-backend-stats></app-backend-stats>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loggedIn && !loading" class="container">
+    <div class="row align-items-center justify-content-center" style="margin-top: 50px;">
+      <div class="col-sm-6">
+        <app-login></app-login>
+      </div>
     </div>
   </div>
 </div>

@@ -11,6 +11,7 @@ import { RestreamsComponent } from './restreams/restreams.component';
 import { EndpointSelectorComponent } from './endpoint-selector/endpoint-selector.component';
 import { StreamStatsComponent } from './stream-stats/stream-stats.component';
 import { BackendStatsComponent } from './backend-stats/backend-stats.component';
+import { SetupComponent } from './setup/setup.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { BackendStatsComponent } from './backend-stats/backend-stats.component';
     RestreamsComponent,
     EndpointSelectorComponent,
     StreamStatsComponent,
-    BackendStatsComponent
+    BackendStatsComponent,
+    SetupComponent
   ],
   imports: [
     BrowserModule,

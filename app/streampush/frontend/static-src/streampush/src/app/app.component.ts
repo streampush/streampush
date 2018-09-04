@@ -11,11 +11,17 @@ export class AppComponent implements OnInit {
   loggedIn: boolean = false
   loading: boolean = true
 
+  setup: boolean = false
+
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
     this.apiService.checkLogin((loggedIn) => {
       this.loading = false;
+
+      this.setup = loggedIn == "setup";
+      if (this.setup) return;
+
       this.loggedIn = loggedIn;
       console.log(`Logged in: ${loggedIn}`)
     });

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import ensure_csrf_cookie
 
-# @login_required(login_url='/login/')
+@ensure_csrf_cookie
 def app_view(request):
     return render(request, 'index.html')
