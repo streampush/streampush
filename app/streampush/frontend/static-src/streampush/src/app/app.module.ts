@@ -12,6 +12,7 @@ import { EndpointSelectorComponent } from './endpoint-selector/endpoint-selector
 import { StreamStatsComponent } from './stream-stats/stream-stats.component';
 import { BackendStatsComponent } from './backend-stats/backend-stats.component';
 import { SetupComponent } from './setup/setup.component';
+import { StreamKeyComponent } from './stream-key/stream-key.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { SetupComponent } from './setup/setup.component';
     EndpointSelectorComponent,
     StreamStatsComponent,
     BackendStatsComponent,
-    SetupComponent
+    SetupComponent,
+    StreamKeyComponent
   ],
   imports: [
     BrowserModule,

@@ -21,7 +21,10 @@ export class SetupComponent implements OnInit {
   }
 
   checkPasswords(event) {
-    this.passwordsMatch = this.password === this.passwordConfirm;
+    // The box you're typing into will never equal event, therefore if
+    // event equals the value of the other box, the passwords are the
+    // same.
+    this.passwordsMatch = (this.password === event) || (this.passwordConfirm === event);
   }
 
   trySetup() {
@@ -35,6 +38,6 @@ export class SetupComponent implements OnInit {
       window.location.reload();
     }, (err) => {
       this.loading = false;
-    })
+    });
   }
 }

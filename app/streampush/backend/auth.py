@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 
 from django.contrib.auth.models import User
 
+
 class AuthView(APIView):
     def post(self, request):
         username = request.data.get("username")

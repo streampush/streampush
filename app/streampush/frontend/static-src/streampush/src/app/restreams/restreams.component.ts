@@ -14,11 +14,8 @@ export class RestreamsComponent implements OnInit {
   public creating:boolean = false;
   public newRestreamName:string;
   public newRestreamEndpoints:any = []
-  rtmpPrefix:string;
 
-  constructor(private apiService: ApiService) { 
-    this.rtmpPrefix = `rtmp://${window.location.host}/`
-
+  constructor(private apiService: ApiService) {
     // Subscribe to live messages and instantly pollRestreams for data
     this.apiService.on('publish', this.pollRestreams.bind(this));
     this.apiService.on('publish_done', this.pollRestreams.bind(this));
@@ -61,11 +58,6 @@ export class RestreamsComponent implements OnInit {
     if (!updated) {
       this.restreams.push(restream);
     }
-  }
-
-  showKey(restream) {
-    if (!restream["showKey"]) restream["showKey"] = false;
-    restream.showKey = !restream.showKey;
   }
 
   pollRestreams() {

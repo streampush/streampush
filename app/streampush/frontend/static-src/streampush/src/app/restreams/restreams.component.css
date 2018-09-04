@@ -12,3 +12,8 @@
     from { background-color: #dc3545; }
     to { background-color: rgb(253, 130, 142); }
 }
+
+/* Fixes weird flashing on modals that are children of .list-group-item */
+.list-group-item, .list-group-item:hover {
+    z-index: auto;
+}
