@@ -8,7 +8,7 @@ import { ApiService } from '../api.service';
 })
 export class RestreamEditComponent implements OnInit {
   deleteTitle = "Are you sure?"
-  deleteMessage = "This restream will be deleted permanently. Continue?"
+  deleteMessage = "This restream will be deleted permanently."
 
   @Input('restream') restream: object;
 
