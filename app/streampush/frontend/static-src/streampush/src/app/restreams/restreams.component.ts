@@ -60,6 +60,11 @@ export class RestreamsComponent implements OnInit {
     }
   }
 
+  removeDeletedRestreams(curRestreams) {
+    var ids = curRestreams.map((restream) => restream.id);
+    this.restreams = this.restreams.filter((restream) => ids.indexOf(restream.id) !== -1);
+  }
+
   pollRestreams() {
     this.apiService.getRestreams()
     .subscribe((data:any[]) => {
@@ -68,7 +73,9 @@ export class RestreamsComponent implements OnInit {
       data.forEach((restream) => {
         this.updateRestream(restream);
       });
-  
+
+      if (data.length !== this.restreams.length) this.removeDeletedRestreams(data);
+
       // Sorting live streams above offline streams
       this.restreams.sort((a, b) => {
         if (a.live && !b.live) return -1;

@@ -4,6 +4,7 @@ import { HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { ChartsModule } from 'ng2-charts';
+import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -13,6 +14,7 @@ import { StreamStatsComponent } from './stream-stats/stream-stats.component';
 import { BackendStatsComponent } from './backend-stats/backend-stats.component';
 import { SetupComponent } from './setup/setup.component';
 import { StreamKeyComponent } from './stream-key/stream-key.component';
+import { RestreamEditComponent } from './restream-edit/restream-edit.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { StreamKeyComponent } from './stream-key/stream-key.component';
     StreamStatsComponent,
     BackendStatsComponent,
     SetupComponent,
-    StreamKeyComponent
+    StreamKeyComponent,
+    RestreamEditComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +36,10 @@ import { StreamKeyComponent } from './stream-key/stream-key.component';
       headerName: 'X-CSRFToken',
     }),
     FormsModule,
-    ChartsModule
+    ChartsModule,
+    ConfirmationPopoverModule.forRoot({
+      confirmButtonType: 'danger'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

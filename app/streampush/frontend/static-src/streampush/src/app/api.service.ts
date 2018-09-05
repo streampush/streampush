@@ -68,6 +68,10 @@ export class ApiService extends EventEmitter {
     return this.post('restreams/create', data);
   }
 
+  deleteRestream(restream) {
+    return this.delete(`restreams/${restream.id}/`);
+  }
+
   createEndpoint(name, url) {
     return this.post('endpoints/create', {
       url,

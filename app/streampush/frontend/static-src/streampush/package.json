@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
     "@types/node": "^10.5.8",
+    "angular-confirmation-popover": "^4.2.0",
     "chart.js": "^2.7.2",
     "chartjs-plugin-streaming": "^1.6.0",
     "core-js": "^2.5.4",

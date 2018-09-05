@@ -17,10 +17,7 @@
         </span>
         <div>
           <app-stream-key [restream]="restream" class="mr-1"></app-stream-key>
-          <div class="btn-group">
-            <button class="btn btn-outline-secondary" type="button"><i class="fas fa-pencil-alt"></i></button>
-            <button class="btn btn-outline-danger" type="button"><i class="fas fa-trash-alt"></i></button>
-          </div>
+          <app-restream-edit [restream]="restream" (onModify)="pollRestreams()"></app-restream-edit>
         </div>
       </div>
       <div *ngIf="restream.live" class="mt-3">

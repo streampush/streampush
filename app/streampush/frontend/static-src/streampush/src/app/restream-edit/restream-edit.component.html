@@ -1,0 +1,4 @@
+<div class="btn-group">
+  <button class="btn btn-outline-secondary" type="button" (click)="modify()"><i class="fas fa-pencil-alt"></i></button>
+  <button class="btn btn-outline-danger" mwlConfirmationPopover [placement]="'bottom'" [popoverTitle]="deleteTitle" [popoverMessage]="deleteMessage" type="button" (confirm)="delete()"><i class="fas fa-trash-alt"></i></button>
+</div>
