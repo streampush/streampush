@@ -54,7 +54,7 @@ class EndpointCreateView(APIView):
         
         owner = get_object_or_404(UserProfile, user=request.user)
 
-        new_endpoint = StreamEndpoint();
+        new_endpoint = StreamEndpoint()
         new_endpoint.name = request.data["name"]
         new_endpoint.url = request.data["url"]
         new_endpoint.owner = owner

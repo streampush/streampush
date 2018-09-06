@@ -64,6 +64,15 @@ export class ApiService extends EventEmitter {
     })
   }
 
+  put(endpoint, data) {
+    return this.http.put(this.basePath + endpoint, data, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": this.getCookie("csrftoken")
+      }
+    })
+  }
+
   createRestream(data) {
     return this.post('restreams/create', data);
   }
@@ -77,6 +86,10 @@ export class ApiService extends EventEmitter {
       url,
       name
     });
+  }
+
+  updateRestream(restream) {
+    return this.put(`restreams/${restream.id}/`, restream);
   }
 
   setup(username, email, password) {

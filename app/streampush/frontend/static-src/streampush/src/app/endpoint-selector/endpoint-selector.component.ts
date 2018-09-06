@@ -18,6 +18,8 @@ export class EndpointSelectorComponent implements OnInit, ControlValueAccessor {
   private changed = new Array<(value) => void>();
   private touched = new Array<() => void>();
 
+  @Input('preselected') preselected:any[];
+
   @Input('disabled') disabled: boolean;
   public endpoints:any[] = [];
   
@@ -49,16 +51,20 @@ export class EndpointSelectorComponent implements OnInit, ControlValueAccessor {
 
   fireChanged() {
     this.changed.forEach((cb) => {
-      cb(this.endpoints.filter((ep) => ep['selected'] == true));
-    })
+      cb(this.endpoints.filter((ep) => ep['selected'] === true));
+    });
   }
 
   pollEndpoints() {
     this.apiService.getEndpoints()
     .subscribe((data:any[]) => {
-      console.log('endpoints data')
-      console.log(data);
       this.endpoints = data;
+      if (this.preselected !== undefined) {
+        this.preselected.forEach((epIn) => {
+          const found = this.endpoints.find((ep) => ep['id'] === epIn['id']);
+          if (found !== undefined) found['selected'] = true;
+        });
+      }
     });
   }
 
@@ -66,9 +72,14 @@ export class EndpointSelectorComponent implements OnInit, ControlValueAccessor {
     this.touched.forEach(f => f());
   }
 
+  setValue(value:any[]) {
+    console.log('got some endpoints');
+    console.log(value);
+  }
+
   writeValue(value:any[]) {
     this.endpoints.forEach((endpoint) => {
-      endpoint.selected = (value.indexOf(endpoint) != -1);
+      endpoint.selected = (value.indexOf(endpoint) !== -1);
     });
   }
 

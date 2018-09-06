@@ -32,10 +32,12 @@ class Restream(models.Model):
     live = models.BooleanField(default=False)
     lastStreamed = models.DateTimeField(null=True, blank=True)
 
-    @property
-    def endpoints(self):
-        rEndpoints = StreamEndpoint.objects.filter(restream=self)
-        return rEndpoints
+    endpoints = models.ManyToManyField('StreamEndpoint', blank=True)
+
+    # @property
+    # def endpoints(self):
+    #     rEndpoints = StreamEndpoint.objects.filter(restream=self)
+    #     return rEndpoints
 
     def __str__(self):
         return "{0}/{1} ({2})".format(self.name, self.owner, self.id)
@@ -47,14 +49,13 @@ class StreamEndpoint(models.Model):
     url = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
     owner = models.ForeignKey(UserProfile, null=True, on_delete=models.CASCADE)
-    restream = models.ManyToManyField(Restream, blank=True)
 
     @property
     def brand(self):
         return getBrand(self.url)
 
     def __str__(self):
-        return "{0}@{1}".format(self.url, self.restream.__str__())
+        return "{0}@{1}".format(self.name, self.url)
 
 
 '''

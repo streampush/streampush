@@ -14,11 +14,7 @@ from django.db.models.signals import post_save, post_delete, m2m_changed
 from django.dispatch import receiver
 
 class RestreamSerializer(serializers.ModelSerializer):
-    endpoints = serializers.SerializerMethodField()
-    
-    def get_endpoints(self, restream):
-        ser = StreamEndpointSerializer(restream.endpoints, many=True)
-        return ser.data
+    endpoints = StreamEndpointSerializer(many=True, read_only=True)
 
     def validate_owner(self, value):
         '''
@@ -29,6 +25,11 @@ class RestreamSerializer(serializers.ModelSerializer):
             return value
         userprofile = get_object_or_404(UserProfile, user=self.context['request'].user)
         return userprofile
+
+    def update(self, instance, validated_data):
+
+
+        return instance
 
     class Meta:
         model = Restream
@@ -59,11 +60,12 @@ class RestreamsCreateView(APIView):
         new_restream = Restream();
         new_restream.name = request.data["name"]
         new_restream.owner = owner
+
         new_restream.save()
 
         for endpoint_data in request.data["endpoints"]:
             endpoint = StreamEndpoint.objects.get(pk=endpoint_data['id'])
-            endpoint.restream.add(new_restream)
+            new_restream.endpoints.add(endpoint)
 
         serializer = RestreamSerializer(new_restream)
         return Response(serializer.data)
@@ -78,7 +80,17 @@ class RestreamViewSet(viewsets.ModelViewSet):
             return Restream.objects.all()
         else:
             user_profile = get_object_or_404(UserProfile, user=self.request.user)
-            return Restream.objects.filter(owner=userProfile)
+            return Restream.objects.filter(owner=user_profile)
+
+    def update(self, request, pk=None):
+        cur_restream = get_object_or_404(Restream, id=pk)
+        cur_restream.endpoints.clear()
+
+        for endpoint in request.data['endpoints']:
+            dbEndpoint = get_object_or_404(StreamEndpoint, pk=endpoint['id'])
+            cur_restream.endpoints.add(dbEndpoint)
+
+        return super(RestreamViewSet, self).update(request, pk)
 
 class RestreamMeLiveView(APIView):
     def get(self, request):
@@ -90,6 +102,8 @@ class RestreamMeLiveView(APIView):
 
 @receiver(post_save, sender=Restream)
 def save_restream_model(sender, instance, **kwargs):
+    print("~~ A restream was just saved ~~")
+
     configs.gen_configs_for_restream(instance)
     requests.get("http://127.0.0.1:8888/api/reload")
 
@@ -99,11 +113,7 @@ def delete_orphans(sender, instance, **kwargs):
     requests.get("http://127.0.0.1:8888/api/reload")
 
 @receiver(post_save, sender=StreamEndpoint)
-@receiver(m2m_changed, sender=StreamEndpoint.restream.through) 
 def save_restream_model_by_endpoint(sender, instance, **kwargs):
-    # We need to also regenerate old configs if an endpoint has been
-    # detached from a restream
-    # for restream in instance.restream.all():
-    for restream in Restream.objects.all():
+    for restream in Restream.objects.filter(endpoints__in=[instance]):
         configs.gen_configs_for_restream(restream)
     requests.get("http://127.0.0.1:8888/api/reload")

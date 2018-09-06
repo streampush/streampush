@@ -33,7 +33,7 @@ def gen_configs_for_restream(restream):
         os.unlink(config_path)
 
     # Get list of endpoints that are associated with this restream
-    endpoints = StreamEndpointSerializer(StreamEndpoint.objects.filter(restream=restream), many=True).data
+    endpoints = StreamEndpointSerializer(restream.endpoints, many=True).data
     endpointsObj = {}
     for endpoint in endpoints:
         endpointsObj[str(endpoint["id"])] = endpoint
@@ -42,7 +42,6 @@ def gen_configs_for_restream(restream):
         "id": restream.id,
         "name": restream.name,
         "_owner": restream.owner.user.username,
-        # "endpoints": StreamEndpointSerializer(endpoints, many=True).data
         "endpoints": endpointsObj
     }
 

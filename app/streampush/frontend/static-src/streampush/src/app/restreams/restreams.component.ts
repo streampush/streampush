@@ -49,7 +49,8 @@ export class RestreamsComponent implements OnInit {
     for (var i = 0; i < this.restreams.length; i++) {
       if (this.restreams[i].id == restream.id) {
         this.restreams[i].live = restream.live;
-        this.restreams[i].endpoint = restream.endpoints;
+        this.restreams[i].name = restream.name;
+        this.restreams[i].endpoints = restream.endpoints;
         updated = true;
         break;
       }
