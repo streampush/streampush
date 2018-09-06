@@ -84,13 +84,26 @@ class RestreamViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         cur_restream = get_object_or_404(Restream, id=pk)
-        cur_restream.endpoints.clear()
 
-        for endpoint in request.data['endpoints']:
-            dbEndpoint = get_object_or_404(StreamEndpoint, pk=endpoint['id'])
-            cur_restream.endpoints.add(dbEndpoint)
+        oldEndpointIDs = [i.id for i in cur_restream.endpoints.all()]
+        dbEndpoints = [get_object_or_404(StreamEndpoint, pk=i['id']) for i in request.data['endpoints']]
+        newEndpointIDs = [i.id for i in dbEndpoints]
 
-        return super(RestreamViewSet, self).update(request, pk)
+        # Add all new items
+        cur_restream.endpoints.add(*dbEndpoints)
+
+        # Remove deleted items
+        toRemove = []
+        for endpointId in oldEndpointIDs:
+            if endpointId not in newEndpointIDs:
+                toRemove.append(get_object_or_404(StreamEndpoint, pk=endpointId))
+        cur_restream.endpoints.remove(*toRemove)
+
+        cur_restream.name = request.data['name']
+        cur_restream.save()
+
+        serializer = RestreamSerializer(cur_restream)
+        return Response(serializer.data)
 
 class RestreamMeLiveView(APIView):
     def get(self, request):
@@ -100,7 +113,8 @@ class RestreamMeLiveView(APIView):
         # Store the data somehow
         
 
-@receiver(post_save, sender=Restream)
+# @receiver(post_save, sender=Restream)
+@receiver(m2m_changed, sender=Restream.endpoints.through)
 def save_restream_model(sender, instance, **kwargs):
     print("~~ A restream was just saved ~~")
 
