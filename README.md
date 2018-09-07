@@ -51,13 +51,13 @@ Navigate to the URL of your Streampush server and finish the initial superuser s
 1) Click the blue key-shaped icon on the restream that you would like to receive your content.
 2) Read the disclaimer.
 3) Click the eye-shaped icon to make your restream URL appear. Paste this URL in your streaming software of choice.
-4) Start your live stream. 
+4) Start your live stream via your streaming software. 
 
 #### SSL
 
 Currently, you'll have to reverse proxy the Streampush image through another web server to provide an SSL layer. In the future, the image will allow for SSL configuration of it's internal nginx server. Ideally, we'll use Let's Encrypt to make it easy.
 
-#### DigitalOcean (DO)
+#### DigitalOcean
 
 DigitalOcean provides a [one-click app](https://www.digitalocean.com/products/one-click-apps/docker/) with Docker pre-installed. Simply follow the above steps after creating your Droplet and you'll be up and running in no time. Though do be aware: they seem to have some [bandwidth limits](https://www.digitalocean.com/docs/accounts/billing/bandwidth/) ($0.01/GB after 1000GB as of June 2018).
 
@@ -75,7 +75,7 @@ My current development process requires rebuilding the Docker image after every 
 
 **Don't use `start.sh` for a production environment.** It doesn't properly set the `SECRET_KEY` for Django.
 
-Some IDE recommendations if you don't already have one: VS Code and/or PyCharm. PyCharm supports Typescript so it works pretty well for the front-end stuff, too.
+Some IDE recommendations if you don't already have one: VS Code and/or PyCharm. PyCharm is great for Django development and supports Typescript so it works pretty well for the front-end stuff, too.
 
 ### List of things that would be greatly appreciated
 * Overall code-review from someone with more experience than myself (esp. w.r.t. RTMP & Docker).
