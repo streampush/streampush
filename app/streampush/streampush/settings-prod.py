@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = 'en(pqmk10xp97+512t$_@prdm-wvud^0bj-pqfmy48l^sd%=f6'
+SECRET_KEY = os.environ.get("DJANGO_SECRET")
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
