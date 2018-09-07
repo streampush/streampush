@@ -75,11 +75,13 @@ My current development process requires rebuilding the Docker image after every 
 
 **Don't use `start.sh` for a production environment.** It doesn't properly set the `SECRET_KEY` for Django.
 
-Some IDE recommendations if you don't already have one: VS Code and/or PyCharm. PyCharm is great for Django development and supports Typescript so it works pretty well for the front-end stuff, too.
+Some IDE recommendations if you don't already have one: VS Code and/or PyCharm. PyCharm is great for Django development and supports Typescript so it works pretty well for developing both the front and backend.
 
 ### List of things that would be greatly appreciated
 * Overall code-review from someone with more experience than myself (esp. w.r.t. RTMP & Docker).
 * Unit tests
+* Stream preview
+* UI design and tips - I'm not a frontend dev.
 
 ## License
 See LICENSE.md
