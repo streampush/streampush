@@ -22,13 +22,36 @@ Streampush has been tested on Ubuntu 16.04 running Docker 18.06.1 CE, but it *sh
 
 Run the below command in a terminal:
 
-```docker run -it -p 80:80 -p 1935:1935 -e DJANGO_SECRET='YourSecretHere' --mount source=streampush-data,target=/opt/streampush/data streampush``` 
+```bash
+docker run -itd \
+           -p 80:80 \
+           -p 1935:1935 \
+           -e DJANGO_SECRET='YourSecretHere' \
+           --restart unless-stopped \
+           --mount source=streampush-data,target=/opt/streampush/data \
+           streampush
+``` 
 
 **Note**: Replace `YourSecretHere` with a long random string of characters. See the [Django docs](https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-SECRET_KEY) for more info.  
 
-This command will pull the Streampush image from Docker Hub and expose the Streampush web interface on port 80. Additionally, port 1935 will be exposed for receiving RTMP streams. Finally, a Docker volume will be created to store the database between container restarts. 
+This command will pull the Streampush image from Docker Hub and expose the Streampush web interface on port 80. Additionally, port 1935 will be exposed for receiving RTMP streams. Finally, a Docker volume will be created to store the database between container restarts. This container will automatically restart should anything crash. 
 
 Navigate to the URL of your Streampush server and finish the initial superuser setup. Login with those credentials and Streampush is ready to use.
+
+#### Configuring
+
+##### Creating a restream
+1) Click the blue `+ Restream` button at the bottom left of the UI.
+2) Provide a name for the restream - this will be used to reference this specific restream within the app.
+3) If no endpoints have been configured, use the form in the popup window to provide a RTMP URL and name for an endpoint. These endpoints can be reused on multiple restreams.
+4) Click the endpoints you'd like to have receive content from this restream - they'll be highlighted in green if they are selected.
+5) Click the save button.
+
+##### Pushing content
+1) Click the blue key-shaped icon on the restream that you would like to receive your content.
+2) Read the disclaimer.
+3) Click the eye-shaped icon to make your restream URL appear. Paste this URL in your streaming software of choice.
+4) Start your live stream. 
 
 #### SSL
 
