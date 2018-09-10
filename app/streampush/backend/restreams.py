@@ -119,15 +119,15 @@ def save_restream_model(sender, instance, **kwargs):
     print("~~ A restream was just saved ~~")
 
     configs.gen_configs_for_restream(instance)
-    requests.get("http://127.0.0.1:8888/api/reload")
+    requests.get("http://relay:8888/api/reload")
 
 @receiver(post_delete, sender=Restream)
 def delete_orphans(sender, instance, **kwargs):
     configs.del_orphan_configs()
-    requests.get("http://127.0.0.1:8888/api/reload")
+    requests.get("http://relay:8888/api/reload")
 
 @receiver(post_save, sender=StreamEndpoint)
 def save_restream_model_by_endpoint(sender, instance, **kwargs):
     for restream in Restream.objects.filter(endpoints__in=[instance]):
         configs.gen_configs_for_restream(restream)
-    requests.get("http://127.0.0.1:8888/api/reload")
+    requests.get("http://relay:8888/api/reload")

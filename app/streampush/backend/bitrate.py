@@ -20,7 +20,7 @@ class BitrateView(APIView):
         restream = get_object_or_404(Restream, pk=request.data['restreamId'])
         restream_id = str(restream.id)
 
-        r = requests.get("http://127.0.0.1:8888/api/stats")
+        r = requests.get("http://relay:8888/api/stats")
         data = r.json()
 
         restream_data = data[restream_id]

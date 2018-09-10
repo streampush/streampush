@@ -5,7 +5,7 @@ from subprocess import call
 
 # Config generation stuff
 
-CONFIG_LOCATION = '/opt/streampush/relay/configs'
+CONFIG_LOCATION = '/opt/streampush/data/configs'
 
 def del_orphan_configs():
     if not os.path.exists(CONFIG_LOCATION):
