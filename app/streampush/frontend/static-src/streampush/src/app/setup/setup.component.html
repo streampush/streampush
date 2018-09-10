@@ -1,0 +1,32 @@
+<div class="card">
+  <div class="card-header">
+    Streampush Setup
+  </div>
+  <form class="was-validated">
+    <div class="card-body">
+      <div class="alert alert-info">Please create a new superuser account.</div>
+      <div class="input-group">
+        <input type="text" class="form-control" id="username" name="username" [(ngModel)]="username" [disabled]="loading" placeholder="Username" required />
+      </div>
+      <div class="input-group mt-2">
+          <input type="text" class="form-control" id="email" name="email" [(ngModel)]="email" [disabled]="loading" placeholder="Email" required />
+        </div>
+      <div class="input-group mt-2">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required
+               (ngModelChange)="checkPasswords($event)" 
+               [(ngModel)]="password" 
+               [disabled]="loading" />
+        <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Again, please." required
+               (ngModelChange)="checkPasswords($event)" 
+               [(ngModel)]="passwordConfirm" 
+               [disabled]="loading" />
+      </div>
+      <small *ngIf="!passwordsMatch" id="passwordHelpBlock" class="form-text text-muted">
+        Your passwords do not match.
+      </small>
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-primary" type="submit" (click)="trySetup()">Finish</button>
+    </div>
+  </form>
+</div>

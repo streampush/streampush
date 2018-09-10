@@ -1,0 +1,31 @@
+<div class="card">
+  <div class="row">
+    <div class="col-md-12">
+      <div style="width: 100%; height: 200px">
+        <canvas baseChart
+                [datasets]="bitrateData"
+                [options]="bitrateChartOptions"
+                legend="true"
+                [chartType]="'line'"
+                *ngIf="bitrateData"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="apiData">
+    <div class="col-md-12">
+      <div>
+        <span class="badge" [ngClass]="endpoint.connected ? 'badge-success' : 'badge-warning'" *ngFor="let endpoint of objectValues(apiData.endpoints)">
+          {{endpoint.name}}
+          <i data-toggle="tooltip" [attr.title]="endpoint.name" class="endpoint-icon" [ngClass]="getBrand(endpoint.url) == 'none' ? 'far fa-question-circle' : 'fab fa-'+getBrand(endpoint.url)"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="apiData">
+    <div class="col-md-12">
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let event of apiData.events.slice().reverse()" class="list-group-item eventItem" [ngClass]="'list-group-item-' + event.level">{{event.time * 1e-6 | date:'mediumTime'}}: {{event.msg}}</li>
+      </ul>
+    </div>
+  </div>
+</div>

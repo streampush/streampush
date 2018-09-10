@@ -1,0 +1,19 @@
+.endpoint-icon {
+    font-size: 24px;
+    margin: 5px;
+}
+
+.live {
+    -moz-animation: liveFlash steps(2) 1000ms infinite;
+    animation: liveFlash steps(2) 1000ms infinite;
+}
+
+@keyframes liveFlash {
+    from { background-color: #dc3545; }
+    to { background-color: rgb(253, 130, 142); }
+}
+
+/* Fixes weird flashing on modals that are children of .list-group-item */
+.list-group-item, .list-group-item:hover {
+    z-index: auto;
+}

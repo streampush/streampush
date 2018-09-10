@@ -1,0 +1,9 @@
+Django
+psycopg2
+channels
+channels_redis
+django-cors-headers
+djangorestframework
+daphne
+requests
+whitenoise

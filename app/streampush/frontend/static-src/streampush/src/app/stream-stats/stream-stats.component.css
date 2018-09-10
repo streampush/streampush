@@ -1,0 +1,21 @@
+.badge {
+    margin: 5px;
+}
+
+.badge-warning {
+    animation: warningFlash steps(1) 500ms infinite alternate;
+}
+
+@keyframes warningFlash {
+    from { 
+        background-color: #ffc107; 
+    }
+    to { 
+        background-color: #ffe28c; 
+    }
+}
+
+.eventItem {
+    padding: 7px;
+    font-size: 13px; 
+}

@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-header">
+    Please login
+  </div>
+  <form>
+    <div class="card-body">
+      <div class="input-group">
+        <input type="text" class="form-control" id="username" name="username" [(ngModel)]="username" [disabled]="loading" placeholder="Username" required />
+      </div>
+      <div class="input-group mt-2">
+        <input type="password" class="form-control" id="password" name="password" [(ngModel)]="password" [disabled]="loading" placeholder="Password" required />
+      </div>
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-primary" type="submit" (click)="tryLogin()">Login</button>
+    </div>
+  </form>
+</div>

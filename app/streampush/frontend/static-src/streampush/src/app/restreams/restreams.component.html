@@ -1,0 +1,62 @@
+<div class="card">
+  <div class="card-header">
+    Restreams
+  </div>
+  <div *ngIf="restreams.length == 0" class="card-body">
+      <div class="alert alert-info" style="margin-bottom: 0px;">Nothing to see here. Why not create a restream below?</div>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li *ngFor="let restream of restreams" class="list-group-item flex-column align-items-start">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{restream.name}}</h5>
+        <div><span class="badge" [ngClass]="{'badge-secondary': !restream.live, 'badge-danger live': restream.live}">{{restream.live ? 'LIVE' : 'OFFLINE'}}</span></div>
+      </div>
+      <div class="d-flex w-100 justify-content-between">
+        <span class="mb-1">
+          <i *ngFor="let endpoint of restream.endpoints" data-toggle="tooltip" [attr.title]="endpoint.name" class="endpoint-icon" [ngClass]="endpoint.brand == 'none' ? 'far fa-question-circle' : 'fab fa-'+endpoint.brand"></i>
+        </span>
+        <div>
+          <app-stream-key [restream]="restream" class="mr-1"></app-stream-key>
+          <app-restream-edit [restream]="restream" (onModify)="pollRestreams()"></app-restream-edit>
+        </div>
+      </div>
+      <div *ngIf="restream.live" class="mt-3">
+        <app-stream-stats [restream]="restream"></app-stream-stats>
+      </div>
+    </li>
+  </ul>
+  <div class="card-footer">
+    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#createRestreamModal"><i class="fas fa-plus"></i> Restream</button>
+  </div>
+</div>
+
+<div id="createRestreamModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create a restream</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closeBtn>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form name="createRestreamForm">
+          <div class="form-group">
+            <label for="restreamName">Restream name</label>
+            <input [(ngModel)]="newRestreamName" required [disabled]="creating" type="text" class="form-control" name="restreamName" id="restreamName" aria-describedby="restreamHelp" placeholder="Enter a name">
+            <small id="restreamHelp" class="form-text text-muted">Make it memorable - we'll display this throughout the app.</small>
+          </div>
+          <div class="form-group">
+            Attach some endpoints
+            <app-endpoint-selector name="newRestreamEndpoints" [(ngModel)]='newRestreamEndpoints' [disabled]="creating"></app-endpoint-selector>
+            <small class="form-text text-muted">This is where we'll push your content to.</small>
+          </div>
+          <div class="btn-group">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()" [disabled]="creating">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="createRestream()" [disabled]="creating">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="card">
+  <div class="card-header">
+    Controls
+  </div>
+  <div class="card-body">
+    <div class="container">
+      <div class="row">
+        <span class="badge col m-1" [ngClass]="'badge-' + status.web">Web</span>
+        <span class="badge col m-1" [ngClass]="'badge-' + status.redis">Redis</span>
+        <span class="badge col m-1" [ngClass]="'badge-' + status.relay">Relay</span>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button class="btn btn-danger btn-sm float-right" (click)="tryLogout()">Logout</button>
+  </div>
+</div>

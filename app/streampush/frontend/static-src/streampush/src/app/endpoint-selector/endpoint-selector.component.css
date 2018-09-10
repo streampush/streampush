@@ -1,0 +1,27 @@
+.endpointBrand {
+    font-size: 32px;
+    display: inline;
+    vertical-align: middle;
+    margin-right: 5px;
+    flex-shrink: 5;
+}
+
+.endpointName {
+    text-align: center;
+    margin-bottom: 0px;
+    line-height: 32px;
+}
+
+.endpointCard {
+    transition: background-color 0.1s ease;
+    transition: color 0.1s ease;
+}
+
+.endpointCard:hover {
+    background-color: #f8f9fa !important;
+    cursor: pointer;
+}
+
+.endpointCard.bg-success:hover {
+    background-color: #27b748 !important;
+}
