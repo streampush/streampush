@@ -20,21 +20,7 @@ Streampush has been tested on Ubuntu 16.04 running Docker 18.06.1 CE, but it *sh
 
 ### Usage
 
-Run the below command in a terminal:
-
-```bash
-docker run -itd \
-           -p 80:80 \
-           -p 1935:1935 \
-           -e DJANGO_SECRET='YourSecretHere' \
-           --restart unless-stopped \
-           --mount source=streampush-data,target=/opt/streampush/data \
-           streampush/streampush
-``` 
-
-**Note**: Replace `YourSecretHere` with a long random string of characters. See the [Django docs](https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-SECRET_KEY) for more info.  
-
-This command will pull the Streampush image from Docker Hub and expose the Streampush web interface on port 80. Additionally, port 1935 will be exposed for receiving RTMP streams. Finally, a Docker volume will be created to store the database between container restarts. This container will automatically restart should anything crash. 
+`TODO`
 
 Navigate to the URL of your Streampush server and finish the initial superuser setup. Login with those credentials and Streampush is ready to use.
 
@@ -84,5 +70,5 @@ Some IDE recommendations if you don't already have one: VS Code and/or PyCharm. 
 * UI design and tips - I'm not a frontend dev.
 
 ## License
-See LICENSE.md
+See [LICENSE](https://github.com/streampush/streampush/blob/master/LICENSE)
 
