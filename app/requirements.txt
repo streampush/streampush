@@ -6,3 +6,4 @@ django-cors-headers
 djangorestframework
 daphne
 requests
+whitenoise
