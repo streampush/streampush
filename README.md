@@ -29,7 +29,7 @@ docker run -itd \
            -e DJANGO_SECRET='YourSecretHere' \
            --restart unless-stopped \
            --mount source=streampush-data,target=/opt/streampush/data \
-           streampush
+           streampush/streampush
 ``` 
 
 **Note**: Replace `YourSecretHere` with a long random string of characters. See the [Django docs](https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-SECRET_KEY) for more info.  
@@ -85,3 +85,4 @@ Some IDE recommendations if you don't already have one: VS Code and/or PyCharm. 
 
 ## License
 See LICENSE.md
+
