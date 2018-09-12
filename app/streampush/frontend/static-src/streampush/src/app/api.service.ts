@@ -17,7 +17,8 @@ export class ApiService extends EventEmitter {
   }
 
   _initWebSocket() {
-    this.notifySocket = new ReconnectingWebSocket(`ws://${window.location.host}/ws/notify`);
+    const prefix = (window.location.protocol == 'https:' ? "wss" : "ws");
+    this.notifySocket = new ReconnectingWebSocket(`${prefix}://${window.location.host}/ws/notify`);
     
     this.notifySocket.onmessage = (msg) => {
       var data = JSON.parse(msg['data']);
