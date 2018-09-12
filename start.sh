@@ -10,7 +10,7 @@ else
     elif [ "$1" == "build" ]; then
         cd ./app/streampush/frontend/static-src/streampush && \
             npm i && \
-            ng build
+            npm run-script build
 
         cd $topDir
 

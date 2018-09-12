@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ApiService } from '../api.service';
+import { Restream } from '../restream';
 
 @Component({
   selector: 'app-restreams',
@@ -7,7 +8,7 @@ import { ApiService } from '../api.service';
   styleUrls: ['./restreams.component.css']
 })
 export class RestreamsComponent implements OnInit {
-  restreams:any[] = [];
+  restreams: Restream[] = [];
 
   @ViewChild('closeBtn') closeBtn: ElementRef;
 

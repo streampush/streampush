@@ -2,6 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} f
 import { ApiService } from '../api.service';
 import {BaseChartDirective} from "ng2-charts";
 import {EndpointSelectorComponent} from "../endpoint-selector/endpoint-selector.component";
+import {Restream} from "../restream";
 
 @Component({
   selector: 'app-restream-edit',
@@ -20,8 +21,8 @@ export class RestreamEditComponent implements OnInit {
 
   loading = false
 
-  @Input('restream') originalRestream: object;
-  restream: object;
+  @Input('restream') originalRestream: Restream;
+  restream: Restream;
   @Output() onModify: EventEmitter<any> = new EventEmitter();
 
   newEndpoints:any[]

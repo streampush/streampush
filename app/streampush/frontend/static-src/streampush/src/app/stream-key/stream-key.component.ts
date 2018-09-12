@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import {Restream} from "../restream";
 
 @Component({
   selector: 'app-stream-key',
@@ -6,9 +7,9 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./stream-key.component.css']
 })
 export class StreamKeyComponent implements OnInit {
-  rtmpPrefix:string
-  visible:boolean = false
-  @Input('restream') restream: object;
+  rtmpPrefix: string;
+  visible: boolean = false;
+  @Input('restream') restream: Restream;
 
   constructor() { }
 
