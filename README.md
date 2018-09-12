@@ -16,13 +16,21 @@
 
 Platforms that will run Docker: Linux / Mac / Windows
 
-Streampush has been tested on Ubuntu 16.04 running Docker 18.06.1 CE, but it *should* work on any platform that supports Docker.
+Streampush has been tested on Ubuntu running Docker, but it *should* work on any platform that supports Docker.
 
 ### Usage
 
-`TODO`
+An easy setup script is provided for installation. All that is required is for `docker` and `docker-compose` to be installed on your host machine. It is recommended that the following steps be performed within an empty directory. Run the command below to start the install process:
 
-Navigate to the URL of your Streampush server and finish the initial superuser setup. Login with those credentials and Streampush is ready to use.
+`wget https://raw.githubusercontent.com/streampush/docker/master/setup/streampush.sh && chmod +x streampush.sh && ./streampush.sh config`
+
+You'll be asked if you'd like to use the default ports. This should work fine for the majority of installs, but if you have to change them - here's your chance.
+
+**It is highly recommended to enable SSL while using Streampush.** The config process can automatically create an nginx server with an SSL certificate provided by Let's Encrypt. If you already have a webserver running on your host machine, you'll need to setup the SSL cert and reverse proxy yourself.
+
+Finally, run `./streampush.sh start` to start the server.
+
+Navigate to the URL of your Streampush server and finish the initial superuser setup. Login with your credentials and Streampush is ready to use.
 
 #### Configuring
 
