@@ -16,27 +16,21 @@
 
 Platforms that will run Docker: Linux / Mac / Windows
 
-Streampush has been tested on Ubuntu 16.04 running Docker 18.06.1 CE, but it *should* work on any platform that supports Docker.
+Streampush has been tested on Ubuntu running Docker, but it *should* work on any platform that supports Docker.
 
 ### Usage
 
-Run the below command in a terminal:
+An easy setup script is provided for installation. All that is required is for `docker` and `docker-compose` to be installed on your host machine. It is recommended that the following steps be performed within an empty directory. Run the command below to start the install process:
 
-```bash
-docker run -itd \
-           -p 80:80 \
-           -p 1935:1935 \
-           -e DJANGO_SECRET='YourSecretHere' \
-           --restart unless-stopped \
-           --mount source=streampush-data,target=/opt/streampush/data \
-           streampush/streampush
-``` 
+`wget https://raw.githubusercontent.com/streampush/docker/master/setup/streampush.sh && chmod +x streampush.sh && ./streampush.sh config`
 
-**Note**: Replace `YourSecretHere` with a long random string of characters. See the [Django docs](https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-SECRET_KEY) for more info.  
+You'll be asked if you'd like to use the default ports. This should work fine for the majority of installs, but if you have to change them - here's your chance.
 
-This command will pull the Streampush image from Docker Hub and expose the Streampush web interface on port 80. Additionally, port 1935 will be exposed for receiving RTMP streams. Finally, a Docker volume will be created to store the database between container restarts. This container will automatically restart should anything crash. 
+**It is highly recommended to enable SSL while using Streampush.** The config process can automatically create an nginx server with an SSL certificate provided by Let's Encrypt. If you already have a webserver running on your host machine, you'll need to setup the SSL cert and reverse proxy yourself.
 
-Navigate to the URL of your Streampush server and finish the initial superuser setup. Login with those credentials and Streampush is ready to use.
+Finally, run `./streampush.sh start` to start the server.
+
+Navigate to the URL of your Streampush server and finish the initial superuser setup. Login with your credentials and Streampush is ready to use.
 
 #### Configuring
 
@@ -84,5 +78,5 @@ Some IDE recommendations if you don't already have one: VS Code and/or PyCharm. 
 * UI design and tips - I'm not a frontend dev.
 
 ## License
-See LICENSE.md
+See [LICENSE](https://github.com/streampush/streampush/blob/master/LICENSE)
 
