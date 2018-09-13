@@ -1,4 +1,4 @@
 [submodule "docker"]
 	path = docker
-	url = git@github.com:streampush/docker.git
+	url = https://github.com/streampush/docker.git
 	branch = master
